@@ -1,8 +1,6 @@
 # LiveSql
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/live_sql`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Hello friends! live_sql is a little program I wrote to watch how your sqlite queries change your results as you type. This is a baby gem. It's has a few known bugs, probably way more unknown bugs, not to mention it could use some sexy new features. If you want to contribute either by pointing out bugs, fixing problems. or adding new features, your help would be greatly appreciated!
 
 ## Installation
 
@@ -19,23 +17,26 @@ And then execute:
 Or install it yourself as:
 
     $ gem install live_sql
-
 ## Usage
 
-TODO: Write usage instructions here
+To use the test database, just download this repo and run bin/console. You can check out how it works with a simple actor, casting, and movie table.
 
-## Development
+To use on any sqlite3 db, navigate to the folder containing the db, run pry (or irb) and
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake false` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+require 'live_sql'
+LiveSQL.run_with('your-db-name-here.db')
 
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/live_sql.
 
+## Running list of bugs and potential features:
+
+  - Oh god, I already forgot the most recent bug. It'll come back to me....
+
+  - The most obvious extension is to get this thing hooked up to postgres as well as sqlite3.
+
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
