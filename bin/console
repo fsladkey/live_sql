@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "live_sql"
+
+db = ARGV[0]
+db ||= './lib/live_sql/default_db/movie.db'
+
+live_sql = LiveSQL.new(db)
+live_sql.run
+
+
+# You can add fixtures and/or initialization code here to make experimenting
+# with your gem easier. You can also use a different console, if you like.
+
+require "pry"
+Pry.start
