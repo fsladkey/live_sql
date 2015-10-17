@@ -28,7 +28,7 @@ LiveSQL.run_with('your-db-name-here.db')
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/live_sql.
+Bug reports and pull requests are welcome on GitHub at https://github.com/fsladkey/live_sql
 
 ## Running list of bugs and potential features:
 
