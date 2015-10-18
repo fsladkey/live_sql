@@ -23,8 +23,8 @@ To use the test database, just download this repo and run bin/console. You can c
 
 To use on any sqlite3 db, navigate to the folder containing the db, run pry (or irb) and
 
-require 'live_sql'
-LiveSQL.run_with('your-db-name-here.db')
+    require 'live_sql'
+    LiveSQL.run_with('your-db-name-here.db')
 
 ## Contributing
 
