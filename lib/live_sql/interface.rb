@@ -51,10 +51,10 @@ class Interface
       :left
     when "\177"
       :backspace
-    # when "\004"
-    #   "DELETE"
-    # when "\e[3~"
-    #   "ALTERNATE DELETE"
+    when "\004"
+      :delete
+     when "\e[3~"
+       :delete
     # when "\u0003"
     #   "CONTROL-C"
     #   exit 0

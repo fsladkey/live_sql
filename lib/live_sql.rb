@@ -4,7 +4,7 @@ require 'singleton'
 require 'sqlite3'
 require 'table_print'
 require 'colorize'
-
+require 'byebug'
 
 class QuestionsDatabase < SQLite3::Database
 
@@ -64,6 +64,13 @@ class LiveSQL
         @cursor_pos -= 1 unless @cursor_pos == 0
       end
       attempt_to_query_db
+    elsif input == :delete
+      
+      if @string.length > 1
+        @string.slice!(@cursor_pos)
+        
+      end
+
     else
       @string.insert(@cursor_pos, input)
       @cursor_pos += 1
