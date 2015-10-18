@@ -106,6 +106,7 @@ class LiveSQL
   end
 
   def query_db(string)
+    return if string =~ /drop/i
     @db.execute(<<-SQL)
       #{string}
       LIMIT 30
