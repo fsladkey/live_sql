@@ -5,7 +5,6 @@ require 'sqlite3'
 require 'table_print'
 require 'colorize'
 
-
 class QuestionsDatabase < SQLite3::Database
 
   def initialize(db)
@@ -64,6 +63,10 @@ class LiveSQL
         @cursor_pos -= 1 unless @cursor_pos == 0
       end
       attempt_to_query_db
+    elsif input == :delete
+      if @string.length > 1
+        @string.slice!(@cursor_pos) 
+      end
     else
       @string.insert(@cursor_pos, input)
       @cursor_pos += 1
@@ -73,6 +76,9 @@ class LiveSQL
 
   def attempt_to_query_db
     old_table = @result
+    if (@string.downcase.include?("count") || @string.downcase.include?("avg")) && (@string =~ /\;\s*$/).nil?
+      raise "Aggregate queries must be terminated with a semi-colon"
+    end
     @result = query_db(@string)
     @mode = :valid
     rescue StandardError => e
@@ -85,6 +91,7 @@ class LiveSQL
     system("clear")
     puts "Enter a query!".underline.bold
     puts "Green is for a valid query, red for syntax error."
+    puts "Queries using AVG() or COUNT() must be terminated with a semi-colon."
     puts "The table always shows the last valid query."
     puts "Press esc to quit."
     if @mode == :invalid
