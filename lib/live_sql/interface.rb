@@ -1,7 +1,5 @@
 require 'io/console'
 
-# Reads keypresses from the user including 2 and 3 escape character sequences.
-
 class Interface
   attr_accessor :string
 
@@ -23,6 +21,7 @@ class Interface
 
   # oringal case statement from:
   # http://www.alecjacobson.com/weblog/?p=75
+  
   def get_keyboard_input
     c = read_char
 
@@ -30,7 +29,7 @@ class Interface
     when "\r"
       :error
     when "\e"
-      :abort
+      :quit
     when "\e[C"
       "RIGHT ARROW"
       :right
