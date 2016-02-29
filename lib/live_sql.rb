@@ -4,14 +4,33 @@ require 'singleton'
 require 'sqlite3'
 require 'table_print'
 require 'colorize'
+require 'pg'
+require 'byebug'
 
-class QuestionsDatabase < SQLite3::Database
+# # Output a table of current connections to the DB
+# # conn = PG.connect( dbname: 'sales' )
+# conn.exec( "SELECT * FROM pg_stat_activity" ) do |result|
+#   puts "     PID | User             | Query"
+#   result.each do |row|
+#     puts " %7d | %-16s | %s " %
+#       row.values_at('procpid', 'usename', 'current_query')
+#   end
+# end
+
+class LiveSqlite3Database < SQLite3::Database
 
   def initialize(db)
     super(db)
 
     self.results_as_hash = true
     self.type_translation = true
+  end
+end
+
+
+class DatabaseConnection
+
+  def initialize
   end
 end
 
@@ -28,9 +47,26 @@ class LiveSQL
     live_sql.run
   end
 
-  def initialize(db)
+  def initialize(db, opts)
+    if opts[:db] == :sqlite
+      @db = QuestionsDatabase.new(db)
+
+      @query = Proc.new { |arg| @db.execute(arg) }
+    else
+      @db = PG.connect(dbname: db)
+      @db.type_map_for_results = PG::BasicTypeMapForResults.new @db
+
+      @query = Proc.new do |arg|
+        results = []
+        result = @db.exec(arg)
+        result.each_row do |row|
+          results << Hash[result.fields.zip(row)]
+        end
+        results
+      end
+    end
+
     @interface = Interface.new
-    @db = QuestionsDatabase.new(db)
 
     @string = " "
     @result = []
@@ -38,6 +74,7 @@ class LiveSQL
     @move = :invalid
     @cursor_pos = 0
     @errors = []
+    puts "DONE"
   end
 
   def run
@@ -65,7 +102,7 @@ class LiveSQL
       attempt_to_query_db
     elsif input == :delete
       if @string.length > 1
-        @string.slice!(@cursor_pos) 
+        @string.slice!(@cursor_pos)
       end
     else
       @string.insert(@cursor_pos, input)
@@ -114,7 +151,7 @@ class LiveSQL
 
   def query_db(string)
     return if string =~ /drop/i
-    @db.execute(<<-SQL)
+    @query.(<<-SQL)
       #{string}
       LIMIT 30
     SQL

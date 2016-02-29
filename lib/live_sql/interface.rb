@@ -27,22 +27,10 @@ class Interface
     c = read_char
 
     case c
-    # when " "
-    #   "SPACE"
-    # when "\t"
-    #   :query
     when "\r"
       :error
-    # when "\n"
-    #   "LINE FEED"
     when "\e"
       :abort
-    # when "\e[A"
-    #   "UP ARROW"
-    #   :error
-    # when "\e[B"
-    #   "DOWN ARROW"
-    #   :error
     when "\e[C"
       "RIGHT ARROW"
       :right
@@ -55,9 +43,6 @@ class Interface
       :delete
      when "\e[3~"
        :delete
-    # when "\u0003"
-    #   "CONTROL-C"
-    #   exit 0
     when /^.$/
       c
     else
