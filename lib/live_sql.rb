@@ -6,7 +6,6 @@ require_relative "./live_sql/sqlite3_dbconnection.rb"
 require_relative "./live_sql/psql_dbconnection.rb"
 require 'table_print'
 require 'colorize'
-require 'byebug'
 
 class LiveSQL
   include Cursorable

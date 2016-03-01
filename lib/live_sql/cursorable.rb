@@ -9,11 +9,11 @@ module Cursorable
   end
 
   def left
-    @cursor_pos += 1 unless @cursor_pos == @string.length - 1
+    @cursor_pos -= 1 unless @cursor_pos == 0
   end
 
   def right
-    @cursor_pos -= 1 unless @cursor_pos == 0
+    @cursor_pos += 1 unless @cursor_pos == @string.length - 1
   end
 
   def backspace

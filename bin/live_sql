@@ -1,0 +1,21 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "live_sql"
+require "thor"
+
+# class Test < Thor
+#   desc "run NAME", "Start the live_sql interface."
+#   def run(name)
+#     LiveSQL.new(name).run
+#   end
+# end
+
+# class Test < Thor
+#   desc "run", "Start the live_sql interface."
+#   def run
+#     "HELLO EVERYONE"
+#   end
+# end
+
+LiveSQL.new(ARGV[0]).run

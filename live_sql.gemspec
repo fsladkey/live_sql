@@ -8,23 +8,23 @@ Gem::Specification.new do |spec|
   spec.version       = LiveSql::VERSION
   spec.authors       = ["Fred Sladkey"]
   spec.email         = ["fsladkey@gmail.com"]
+  spec.executables   = ["live_sql"]
 
-  spec.summary       = %q{Interact with sqlite3 db and watch your query as you type.}
+  spec.summary       = %q{Live updating database querying utility.}
+  spec.description   = %q{Interact with psql/sqlite3 database and watch your results change as you type the query.}
   spec.homepage      = "https://github.com/fsladkey/Live-SQL"
   spec.license       = "MIT"
 
-  # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
-  # delete this section to allow pushing this gem to any host.
-
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
   spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "bundler", "~> 1.10"
   spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_dependency "thor", "~> 0.19"
 
-  spec.add_dependency 'sqlite3'
-  spec.add_dependency 'colorize'
-  spec.add_dependency 'table_print'
+  spec.add_dependency 'sqlite3', '1.3.11'
+  spec.add_dependency 'pg', '0.18.4'
+  spec.add_dependency 'colorize', '0.7.7'
+  spec.add_dependency 'table_print', '1.5.4'
 end
