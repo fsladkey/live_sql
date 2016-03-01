@@ -65,13 +65,13 @@ class LiveSQL
   end
 
   def filter_aggregate_functions
-    if aggregate_func_names.any? { |func| string.upcase.include?(func) } && unterminated?
+    if aggregate_func_names.any? { |func| string.upcase.include?(func) } && !terminated?
       raise "Aggregate queries must be terminated with a semi-colon"
     end
   end
 
-  def unterminated?
-    string =~ /\;\s*$/.nil?
+  def terminated?
+    !!(string =~ /\;\s*$/)
   end
 
   def query_db(string)
