@@ -35,6 +35,7 @@ To use sqlite3 db, navigate to the folder containing the db and run
 The gem exposes the LiveSQL class. To open the interface create a new instance, and call the run method.
 
 ```ruby
+require 'live_sql'
 options = { db: :sqlite3, limit: 40 }
 LiveSQL.new(your_database_name, options).run
 ```
