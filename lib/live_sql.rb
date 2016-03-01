@@ -15,7 +15,7 @@ class LiveSQL
   attr_reader :db, :limit, :interface
 
   def initialize(db, opts = {})
-    if opts[:db] == :sqlite
+    if opts[:db] == :sqlite3
       @db = Sqlite3DatabaseConnection.new(db)
     else
       @db = PostgresDatabaseConnection.new(db)

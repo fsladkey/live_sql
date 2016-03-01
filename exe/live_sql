@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require "bundler/setup"
+require "live_sql"
+
+db_name = ARGV[0]
+options = { db: ARGV[1].to_sym }
+LiveSQL.new(db_name, options).run
