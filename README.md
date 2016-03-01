@@ -1,6 +1,6 @@
 # LiveSql
 
-Hello friends! live_sql is a little program I wrote to watch how your sqlite queries change your results as you type. This is a baby gem. It's has a few known bugs, probably way more unknown bugs, not to mention it could use some sexy new features. If you want to contribute either by pointing out bugs, fixing problems. or adding new features, your help would be greatly appreciated!
+Hello friends! live_sql is a little program I wrote to watch how your SQL queries change your results as you type. This is a baby gem, so contributions are welcome! Fixing problems, adding new features, or reporting bugs is greatly appreciated!
 
 ## Installation
 
@@ -17,14 +17,27 @@ And then execute:
 Or install it yourself as:
 
     $ gem install live_sql
+
 ## Usage
 
-To use the test database, just download this repo and run bin/console. You can check out how it works with a simple actor, casting, and movie table.
+### Running from the Terminal
+To use with a postgres db, simply run:
 
-To use on any sqlite3 db, navigate to the folder containing the db, run pry (or irb) and
+    live_sql your_database_name_here
 
-    require 'live_sql'
-    LiveSQL.run_with('your-db-name-here.db')
+To use sqlite3 db, navigate to the folder containing the db and run
+
+    live_sql your_database_name_here.db sqlite3
+
+
+### Using the class
+
+The gem exposes the LiveSQL object. To open the interface create a new instance, and call the run method.
+
+```ruby
+options = { db: :sqlite3, limit: 40 }
+LiveSQL.new(your_database_name, options).run
+```
 
 ## Contributing
 
@@ -32,10 +45,9 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/fsladk
 
 ## Running list of bugs and potential features:
 
-  - Oh god, I already forgot the most recent bug. It'll come back to me....
+  - Allow aggregate functions to be included in select but not actually used in the query until a group by clause is added.
 
-  - The most obvious extension is to get this thing hooked up to postgres as well as sqlite3.
-
+  - Allow cursor navigation by holding down command/option for jumping words etc.
 
 ## License
 
