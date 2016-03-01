@@ -1,6 +1,6 @@
 require 'sqlite3'
 
-class LiveSqlite3DatabaseConnection < SQLite3::Database
+class Sqlite3DatabaseConnection < SQLite3::Database
 
   def initialize(db)
     super(db)

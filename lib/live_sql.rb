@@ -4,7 +4,6 @@ require_relative "./live_sql/cursorable.rb"
 require_relative "./live_sql/util.rb"
 require_relative "./live_sql/sqlite3_dbconnection.rb"
 require_relative "./live_sql/psql_dbconnection.rb"
-require 'singleton'
 require 'table_print'
 require 'colorize'
 require 'byebug'
@@ -13,15 +12,14 @@ class LiveSQL
   include Cursorable
   include Util
 
-  attr_accessor :result
+  attr_accessor :result, :cursor_pos, :errors, :string, :state
+  attr_reader :db, :limit, :interface
 
   def initialize(db, opts = {})
-    debugger
     if opts[:db] == :sqlite
-      @db = LiveSqlite3DatabaseConnection.new(db)
+      @db = Sqlite3DatabaseConnection.new(db)
     else
-      @db = PostgresqlDatabaseConnection.new(db)
-      end
+      @db = PostgresDatabaseConnection.new(db)
     end
 
     @interface = Interface.new
@@ -34,22 +32,23 @@ class LiveSQL
     @errors = []
   end
 
+
   def run
-    while true
+    loop do
       print_display
-      input = @interface.get_keyboard_input
+      input = interface.get_keyboard_input
       handle_input(input)
     end
   end
 
-  private
+  # private
 
   def handle_input(input)
     if input.is_a?(Symbol)
       send(input)
     else
-      @string.insert(@cursor_pos, input)
-      @cursor_pos += 1
+      string.insert(cursor_pos, input)
+      self.cursor_pos += 1
       attempt_to_query_db
     end
   end
@@ -58,42 +57,49 @@ class LiveSQL
     old_table = result
     filter_aggregate_functions
 
-    result = query_db(@string)
-    @state = :valid
+    self.result = query_db(string)
+    self.state = :valid
     rescue StandardError => e
-      @errors << e.message
-      @result = old_table
-      @state = :invalid
+      errors << e.message
+      self.result = old_table
+      self.state = :invalid
   end
 
   def filter_aggregate_functions
-    if if aggregate_func_names.any? { |func| @string.upcase.include?(func) } && (@string =~ /\;\s*$/).nil?
+    if aggregate_func_names.any? { |func| string.upcase.include?(func) } && unterminated?
       raise "Aggregate queries must be terminated with a semi-colon"
     end
   end
 
+  def unterminated?
+    string =~ /\;\s*$/.nil?
+  end
+
   def query_db(string)
     return if string =~ /drop/i
-    @query.(<<-SQL)
+    db.execute(<<-SQL)
     #{string}
     LIMIT
-      #{@limit}
+      #{limit}
     SQL
   end
 
   def print_display
     system("clear")
+    prompt
+    render
+  end
+
+  def prompt
     puts "Enter a query!".underline.bold
     puts "Green is for a valid query, red for syntax error."
     puts "Queries using AVG() or COUNT() must be terminated with a semi-colon."
     puts "The table always shows the last valid query."
     puts "Press esc to quit."
+  end
 
-    if @state == :invalid
-      print_invalid_query
-    else
-      print_valid_query
-    end
+  def render
+    state == :invalid ? print_invalid_query : print_valid_query
     print_table
   end
 
@@ -112,12 +118,7 @@ class LiveSQL
   end
 
   def print_table
-    tp @result
+    tp result
   end
 
-
-end
-
-if __FILE__ == $PROGRAM_NAME
-  ls = LiveSQL.new(ARGV.pop).run
 end

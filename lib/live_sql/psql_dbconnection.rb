@@ -1,13 +1,13 @@
 require 'pg'
 
-class PostgresqlDatabaseConnection
+class PostgresDatabaseConnection
 
   def initialize(db)
     @connection = PG.connect(dbname: db)
     @connection.type_map_for_results = PG::BasicTypeMapForResults.new @connection
   end
 
-  def execute
+  def execute(arg)
     results = []
     result = @connection.exec(arg)
     result.each_row do |row|
